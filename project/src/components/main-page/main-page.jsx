@@ -1,6 +1,7 @@
 import React from 'react';
 import FilmCard from '../film-card/film-card';
 import PropTypes from 'prop-types';
+import Logo from '../logo/logo';
 
 function MainPage(props) {
   const {films, promo} = props;
@@ -14,13 +15,7 @@ function MainPage(props) {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header film-card__head">
-          <div className="logo">
-            <a className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo light></Logo>
 
           <ul className="user-block">
             <li className="user-block__item">
@@ -105,9 +100,7 @@ function MainPage(props) {
 
           <div className="catalog__films-list">
             {
-              /*eslint-disable */
-              films.map((film, i) => <FilmCard key={film.text + i} image={film.image} text={film.text} />)
-              /*eslint-enable */
+              films.map((film) => <FilmCard key={film.id} {...film} />)
             }
           </div>
 
@@ -117,13 +110,7 @@ function MainPage(props) {
         </section>
 
         <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo></Logo>
 
           <div className="copyright">
             <p>© 2019 What to watch Ltd.</p>
