@@ -2,10 +2,10 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function Logo(props) {
+function Logo({light = false}) {
   return (
     <div className="logo">
-      <Link className={props.light ? 'logo__link' : 'logo__link logo__link--light'} to="/">
+      <Link className={light ? 'logo__link' : 'logo__link logo__link--light'} to="/">
         <span className="logo__letter logo__letter--1">W</span>
         <span className="logo__letter logo__letter--2">T</span>
         <span className="logo__letter logo__letter--3">W</span>
@@ -15,7 +15,7 @@ function Logo(props) {
 }
 
 Logo.propTypes = {
-  light: PropTypes.bool.isRequired,
+  light: PropTypes.bool,
 };
 
 export default Logo;

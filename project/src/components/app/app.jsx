@@ -9,29 +9,29 @@ import MyList from '../my-list/my-list';
 import Player from '../player/player';
 import SignIn from '../sign-in/sign-in';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
+import filmCardProp from '../film-card/film-card.prop';
 
-function App(props) {
-  const {films, promo} = props;
+function App({films}) {
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.ROOT}>
-          <MainPage films={films} promo={promo}/>
+          <MainPage films={films}/>
         </Route>
         <Route exact path={AppRoute.LOGIN}>
           <SignIn />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <FilmPage />
+          <FilmPage films={films} />
         </Route>
         <Route exact path={AppRoute.REVIEW}>
-          <AddReview />
+          <AddReview films={films}/>
         </Route>
         <Route exact path={AppRoute.PLAYER}>
-          <Player />
+          <Player films={films}/>
         </Route>
         <Route exact path={AppRoute.LIST}>
-          <MyList />
+          <MyList films={films}/>
         </Route>
         <Route>
           <NotFoundScreen />
@@ -42,17 +42,7 @@ function App(props) {
 }
 
 App.propTypes = {
-  promo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    genre: PropTypes.string,
-    date: PropTypes.string,
-  }),
-  films: PropTypes.arrayOf(
-    PropTypes.shape({
-      image: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
 };
 
 export default App;

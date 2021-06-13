@@ -1,9 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {useParams} from 'react-router-dom';
+import filmCardProp from '../film-card/film-card.prop';
 
-function Player() {
+function Player({films}) {
+  const { id } = useParams();
+  const [ film ] = films.filter((element) => element.id === Number.parseInt(id, 10));
+
+  const formatRuntime = (runtime) => {
+    const hours   = Math.floor(runtime / 60);
+    let minutes = Math.floor((runtime - hours * 60));
+    let seconds = Math.floor(runtime * 60 - hours * 3600 - minutes * 60);
+
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   return (
     <div className="player">
-      <video src="#" className="player__video" poster="img/player-poster.jpg"></video>
+      <video src="#" className="player__video" poster={film.posterImage}></video>
 
       <button type="button" className="player__exit">Exit</button>
 
@@ -13,7 +30,7 @@ function Player() {
             <progress className="player__progress" value="30" max="100"></progress>
             <div className="player__toggler" style={{ left: '30%'}}>Toggler</div>
           </div>
-          <div className="player__time-value">1:30:29</div>
+          <div className="player__time-value">{formatRuntime(film.runTime)}</div>
         </div>
 
         <div className="player__controls-row">
@@ -23,7 +40,7 @@ function Player() {
             </svg>
             <span>Play</span>
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{film.name}</div>
 
           <button type="button" className="player__full-screen">
             <svg viewBox="0 0 27 27" width="27" height="27">
@@ -36,5 +53,9 @@ function Player() {
     </div>
   );
 }
+
+Player.propTypes = {
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
+};
 
 export default Player;
