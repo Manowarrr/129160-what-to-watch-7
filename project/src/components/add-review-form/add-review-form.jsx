@@ -4,11 +4,13 @@ function AddReviewForm() {
   const [checkedRadioBtnValue, setCheckedRadioBtnValue] = useState(null);
   const [commentText, setCommentText] = useState('');
 
+  const handleChange = (evt) => setCheckedRadioBtnValue(evt.target.value);
+
   return (
     <div className="add-review">
-      <form action="#" className="add-review__form">
+      <form action="#" className="add-review__form" onChange={ handleChange }>
         <div className="rating">
-          <div className="rating__stars" onChange={(evt) => setCheckedRadioBtnValue(evt.target.value)}>
+          <div className="rating__stars">
             <input className="rating__input" id="star-10" type="radio" name="rating" value="10" />
             <label className="rating__label" htmlFor="star-10">Rating 10</label>
 

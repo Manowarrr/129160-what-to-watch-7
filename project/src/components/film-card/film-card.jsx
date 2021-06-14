@@ -3,12 +3,12 @@ import filmProp from './film-card.prop';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 
-function FilmCard({film, onHoverToggle, active}) {
+function FilmCard({film, onMouseEnter, onMouseLeave, active}) {
   return (
     <article
       className="small-film-card catalog__films-card"
-      onMouseEnter={() => onHoverToggle(film.id)}
-      onMouseLeave={() => onHoverToggle(null)}
+      onMouseEnter={() => onMouseEnter(film.id)}
+      onMouseLeave={() => onMouseLeave(null)}
     >
       <div className="small-film-card__image">
         <img src={film.posterImage} alt={film.name} width="280" height="175" />
@@ -22,7 +22,8 @@ function FilmCard({film, onHoverToggle, active}) {
 
 FilmCard.propTypes = {
   film: filmProp,
-  onHoverToggle: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
+  onMouseLeave: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
 };
 

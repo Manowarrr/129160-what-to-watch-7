@@ -6,6 +6,9 @@ import FilmCard from '../film-card/film-card';
 function FilmCardList ({films}) {
   const [activeFilm, setActiveFilm] = useState(null);
 
+  const handleMouseEnter = (id) => setActiveFilm(id);
+  const handleMouseLeave = () => setActiveFilm(null);
+
   return (
     <div className="catalog__films-list">
       {
@@ -14,7 +17,8 @@ function FilmCardList ({films}) {
             <FilmCard
               key={film.id}
               film={film}
-              onHoverToggle={setActiveFilm}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               active={activeFilm===film.id}
             />),
         )
