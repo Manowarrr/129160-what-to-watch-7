@@ -1,10 +1,10 @@
 import React from 'react';
-import FilmCard from '../film-card/film-card';
 import PropTypes from 'prop-types';
+import FilmCardList from '../film-card-list/film-card-list';
+import filmCardProp from '../film-card/film-card.prop';
 import Logo from '../logo/logo';
 
-function MainPage(props) {
-  const {films, promo} = props;
+function MainPage({films}) {
   return (
     <React.Fragment>
       <section className="film-card">
@@ -36,10 +36,10 @@ function MainPage(props) {
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{promo.name}</h2>
+              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{promo.genre}</span>
-                <span className="film-card__year">{promo.date}</span>
+                <span className="film-card__genre">Drama</span>
+                <span className="film-card__year">2014</span>
               </p>
 
               <div className="film-card__buttons">
@@ -98,11 +98,7 @@ function MainPage(props) {
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            {
-              films.map((film) => <FilmCard key={film.id} {...film} />)
-            }
-          </div>
+          <FilmCardList films={films}/>
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
@@ -122,17 +118,7 @@ function MainPage(props) {
 }
 
 MainPage.propTypes = {
-  promo: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    genre: PropTypes.string,
-    date: PropTypes.string,
-  }),
-  films: PropTypes.arrayOf(
-    PropTypes.shape({
-      image: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+  films: PropTypes.arrayOf(filmCardProp).isRequired,
 };
 
 export default MainPage;
