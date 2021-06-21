@@ -1,17 +1,22 @@
 import React from 'react';
+import VideoPlayer from '../video-player/video-player';
 import filmProp from './film-card.prop';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 
 function FilmCard({film, onMouseEnter, onMouseLeave, active}) {
+  const handleOnMouseEnter = () => onMouseEnter(film.id);
+  const handleOnMouseLeave = () => onMouseLeave(null);
+
   return (
     <article
       className="small-film-card catalog__films-card"
-      onMouseEnter={() => onMouseEnter(film.id)}
-      onMouseLeave={() => onMouseLeave(null)}
+      onMouseEnter={handleOnMouseEnter}
+      onMouseLeave={handleOnMouseLeave}
     >
       <div className="small-film-card__image">
-        <img src={film.posterImage} alt={film.name} width="280" height="175" />
+        {active || <img src={film.posterImage} alt={film.name} width='280' height='175' />}
+        {active && <VideoPlayer poster={film.posterImage} video={film.previewVideoLink}></VideoPlayer>}
       </div>
       <h3 className="small-film-card__title">
         <Link className="small-film-card__link" to={`/films/${film.id}`}>{film.name}</Link>

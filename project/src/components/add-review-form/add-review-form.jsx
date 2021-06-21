@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 
 function AddReviewForm() {
-  const [checkedRadioBtnValue, setCheckedRadioBtnValue] = useState(null);
-  const [commentText, setCommentText] = useState('');
 
-  const handleChange = (evt) => setCheckedRadioBtnValue(evt.target.value);
+  const formRef = useRef(null);
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const ratingValue = new FormData(formRef.current).get('rating');
+    const reviewText = new FormData(formRef.current).get('review-text');
+  };
 
   return (
     <div className="add-review">
-      <form action="#" className="add-review__form" onChange={ handleChange }>
+      <form
+        action="#"
+        className="add-review__form"
+        onSubmit={handleSubmit}
+        ref={formRef}
+      >
         <div className="rating">
           <div className="rating__stars">
             <input className="rating__input" id="star-10" type="radio" name="rating" value="10" />
@@ -48,7 +56,6 @@ function AddReviewForm() {
             className="add-review__textarea"
             name="review-text" id="review-text"
             placeholder="Review text"
-            onChange={(evt) => setCommentText(evt.target.value)}
           >
           </textarea>
           <div className="add-review__submit">
