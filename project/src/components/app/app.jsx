@@ -10,8 +10,9 @@ import Player from '../player/player';
 import SignIn from '../sign-in/sign-in';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import filmCardProp from '../film-card/film-card.prop';
+import reviewProp from '../review/review.prop';
 
-function App({films}) {
+function App({films, reviews}) {
   return (
     <BrowserRouter>
       <Switch>
@@ -22,7 +23,7 @@ function App({films}) {
           <SignIn />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <FilmPage films={films} />
+          <FilmPage films={films} reviews={reviews}/>
         </Route>
         <Route exact path={AppRoute.REVIEW}>
           <AddReview films={films}/>
@@ -43,6 +44,7 @@ function App({films}) {
 
 App.propTypes = {
   films: PropTypes.arrayOf(filmCardProp).isRequired,
+  reviews: PropTypes.arrayOf(reviewProp).isRequired,
 };
 
 export default App;
