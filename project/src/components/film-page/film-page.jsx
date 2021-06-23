@@ -1,13 +1,16 @@
 import React from 'react';
 import Logo from '../logo/logo';
 import FilmCardList from '../film-card-list/film-card-list';
+import FilmPageTabs from '../film-page-tabs/film-page-tabs';
 import {Link, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import filmCardProp from '../film-card/film-card.prop';
+import reviewProp from '../review/review.prop';
 
-function FilmPage({films}) {
+function FilmPage({films, reviews}) {
   const { id } = useParams();
   const [ film ] = films.filter((element) => element.id === Number.parseInt(id, 10));
+  const filmComments = reviews.filter((review) => review.id === Number.parseInt(id, 10));
 
   return (
     <React.Fragment>
@@ -67,39 +70,8 @@ function FilmPage({films}) {
               <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
             </div>
 
-            <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
+            <FilmPageTabs film={film} reviews={filmComments}></FilmPageTabs>
 
-              <div className="film-rating">
-                <div className="film-rating__score">{film.rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{film.scoresCount} ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>{film.description}</p>
-
-                {/* <p>Gustave prides himself on providing first-class service to the hotel`&apos`s guests, including satisfying the sexual needs of the many elderly women who stay there. When one of Gustave`&apos`s lovers dies mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.</p> */}
-
-                <p className="film-card__director"><strong>Director: {film.director}</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: {film.starring.join(', ')} and other</strong></p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -125,6 +97,7 @@ function FilmPage({films}) {
 
 FilmPage.propTypes = {
   films: PropTypes.arrayOf(filmCardProp).isRequired,
+  reviews: PropTypes.arrayOf(reviewProp).isRequired,
 };
 
 export default FilmPage;

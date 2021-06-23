@@ -1,6 +1,6 @@
 import React from 'react';
 import VideoPlayer from '../video-player/video-player';
-import filmProp from './film-card.prop';
+import filmCardProp from './film-card.prop';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 
@@ -26,7 +26,7 @@ function FilmCard({film, onMouseEnter, onMouseLeave, active}) {
 }
 
 FilmCard.propTypes = {
-  film: filmProp,
+  film: filmCardProp,
   onMouseEnter: PropTypes.func.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,

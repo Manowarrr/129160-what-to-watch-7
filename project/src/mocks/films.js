@@ -147,7 +147,7 @@ const films = [
     'director': 'Ethan Coen',
     'starring': ['Tommy Lee Jones', 'Javier Bardem', 'Josh Brolin'],
     'runTime': 122,
-    'genre': 'Crime',
+    'genre': 'Comedy',
     'released': 2007,
     'isFavorite': false,
   },
