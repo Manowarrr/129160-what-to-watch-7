@@ -6,3 +6,5 @@ export const AppRoute = {
   PLAYER: '/player/:id',
   ROOT: '/',
 };
+
+export const BASE_GENRE = 'All genres';
