@@ -1,19 +1,22 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import filmCardProp from '../film-card/film-card.prop';
 import FilmCard from '../film-card/film-card';
+import { connect } from 'react-redux';
+import { filterFilmsByGenre } from '../../util';
 
 function FilmCardList ({films}) {
   const [activeFilm, setActiveFilm] = useState(null);
-  const timer = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleMouseEnter = (id) => {
-    timer.current = setTimeout(() => setActiveFilm(id), 1000);
-  };
-  const handleMouseLeave = () => {
-    clearTimeout(timer.current);
-    setActiveFilm(null);
-  };
+  const handleMouseEnter = (id) => setActiveFilm(id);
+  const handleMouseLeave = () => setActiveFilm(null);
+
+  useEffect(() => {
+    setIsPlaying(false);
+    const timer = setTimeout(() => setIsPlaying(true), 1000);
+    return () => clearTimeout(timer);
+  }, [activeFilm]);
 
   return (
     <div className="catalog__films-list">
@@ -25,7 +28,7 @@ function FilmCardList ({films}) {
               film={film}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              active={activeFilm===film.id}
+              active={activeFilm===film.id && isPlaying}
             />),
         )
       }
@@ -37,4 +40,9 @@ FilmCardList.propTypes = {
   films: PropTypes.arrayOf(filmCardProp).isRequired,
 };
 
-export default FilmCardList;
+const mapStateToProps = (state) => ({
+  films: filterFilmsByGenre(state.films, state.genre),
+});
+
+export { FilmCardList };
+export default connect(mapStateToProps, null)(FilmCardList);
