@@ -2,15 +2,18 @@ import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import filmCardProp from '../film-card/film-card.prop';
 import FilmCard from '../film-card/film-card';
+import ShowmoreBtn from '../showmore-btn/showmore-btn';
 import { connect } from 'react-redux';
 import { filterFilmsByGenre } from '../../util';
 
 function FilmCardList ({films}) {
   const [activeFilm, setActiveFilm] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showFilmsCount, setShowFilmsCount] = useState(8);
 
   const handleMouseEnter = (id) => setActiveFilm(id);
   const handleMouseLeave = () => setActiveFilm(null);
+  const handleShowmoreBtnClick = () => setShowFilmsCount(showFilmsCount + 8);
 
   useEffect(() => {
     setIsPlaying(false);
@@ -19,20 +22,26 @@ function FilmCardList ({films}) {
   }, [activeFilm]);
 
   return (
-    <div className="catalog__films-list">
+    <React.Fragment>
+      <div className="catalog__films-list">
+        {
+          films.slice(0, showFilmsCount).map(
+            (film) => (
+              <FilmCard
+                key={film.id}
+                film={film}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                active={activeFilm===film.id && isPlaying}
+              />),
+          )
+        }
+      </div>
       {
-        films.map(
-          (film) => (
-            <FilmCard
-              key={film.id}
-              film={film}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              active={activeFilm===film.id && isPlaying}
-            />),
-        )
+        showFilmsCount < films.length &&
+        <ShowmoreBtn handleShowmoreBtnClick={handleShowmoreBtnClick}></ShowmoreBtn>
       }
-    </div>
+    </React.Fragment>
   );
 }
 

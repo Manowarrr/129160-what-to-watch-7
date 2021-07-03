@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FilmCardList from '../film-card-list/film-card-list';
 import FilmFilter from '../film-filter/film-filter';
-import filmCardProp from '../film-card/film-card.prop';
 import Logo from '../logo/logo';
+import { connect } from 'react-redux';
+import { ActionCreator } from '../../store/action';
+import { BASE_GENRE } from '../../const';
 
-function MainPage({films}) {
+function MainPage({changeGenre}) {
+  useEffect(() => changeGenre(BASE_GENRE));
+
   return (
     <React.Fragment>
       <section className="film-card">
@@ -66,13 +70,10 @@ function MainPage({films}) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <FilmFilter ></FilmFilter>
+          <FilmFilter></FilmFilter>
 
-          <FilmCardList />
+          <FilmCardList></FilmCardList>
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
         </section>
 
         <footer className="page-footer">
@@ -88,7 +89,14 @@ function MainPage({films}) {
 }
 
 MainPage.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  changeGenre: PropTypes.func.isRequired,
 };
 
-export default MainPage;
+const mapDispatchToProps = (dispatch) => ({
+  changeGenre(genre) {
+    dispatch(ActionCreator.changeGenre(genre));
+  },
+});
+
+export { MainPage };
+export default connect(null, mapDispatchToProps)(MainPage);
