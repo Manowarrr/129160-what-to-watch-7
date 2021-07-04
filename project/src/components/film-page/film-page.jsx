@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../logo/logo';
-import FilmCardList from '../film-card-list/film-card-list';
+import FilmCardListSimilar from '../film-card-list-similar/film-card-list-similar';
 import FilmPageTabs from '../film-page-tabs/film-page-tabs';
 import {Link, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -80,7 +80,7 @@ function FilmPage({films, reviews}) {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmCardList films={films.slice(0, 4)}></FilmCardList>
+          <FilmCardListSimilar films={films}></FilmCardListSimilar>
         </section>
 
         <footer className="page-footer">
