@@ -7,4 +7,16 @@ export const AppRoute = {
   ROOT: '/',
 };
 
+export const AuthorizationStatus = {
+  AUTH: 'AUTH',
+  NO_AUTH: 'NO_AUTH',
+  UNKNOWN: 'UNKNOWN',
+};
+
+export const APIRoute = {
+  FILMS: '/films',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+};
+
 export const BASE_GENRE = 'All genres';
