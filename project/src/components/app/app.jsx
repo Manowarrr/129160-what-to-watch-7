@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route, BrowserRouter} from 'react-router-dom';
+import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 import {AppRoute} from '../../const';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,6 +14,8 @@ import NotFoundScreen from '../not-found-screen/not-found-screen';
 import filmCardProp from '../film-card/film-card.prop';
 //import reviewProp from '../review/review.prop';
 import { isCheckedAuth } from '../../util';
+import PrivateRoute from '../private-route/private-route';
+import browserHistory from '../../browser-history';
 
 function App(props) {
   const {films, authorizationStatus, isDataLoaded} = props;
@@ -25,7 +27,7 @@ function App(props) {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.ROOT}>
           <MainPage />
@@ -36,15 +38,21 @@ function App(props) {
         <Route exact path={AppRoute.FILM}>
           <FilmPage films={films}/>
         </Route>
-        <Route exact path={AppRoute.REVIEW}>
-          <AddReview films={films}/>
-        </Route>
+        <PrivateRoute
+          exact
+          path={AppRoute.REVIEW}
+          render={() => <AddReview />}
+        >
+        </PrivateRoute>
         <Route exact path={AppRoute.PLAYER}>
           <Player films={films}/>
         </Route>
-        <Route exact path={AppRoute.LIST}>
-          <MyList films={films}/>
-        </Route>
+        <PrivateRoute
+          exact
+          path={AppRoute.LIST}
+          render={() => <MyList />}
+        >
+        </PrivateRoute>
         <Route>
           <NotFoundScreen />
         </Route>
