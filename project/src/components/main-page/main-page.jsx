@@ -2,13 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FilmCardList from '../film-card-list/film-card-list';
 import FilmFilter from '../film-filter/film-filter';
+import UserBlock from '../user-block/user-block';
 import Logo from '../logo/logo';
 import { connect } from 'react-redux';
 import { ActionCreator } from '../../store/action';
-import { BASE_GENRE } from '../../const';
+import { BASE_GENRE, AuthorizationStatus } from '../../const';
 
-function MainPage({changeGenre}) {
+function MainPage({changeGenre, authorizationStatus}) {
   useEffect(() => changeGenre(BASE_GENRE));
+
+  const isSignedIn = authorizationStatus === AuthorizationStatus.AUTH;
 
   return (
     <React.Fragment>
@@ -19,19 +22,9 @@ function MainPage({changeGenre}) {
 
         <h1 className="visually-hidden">WTW</h1>
 
-        <header className="page-header film-card__head">
+        <header className={`page-header ${isSignedIn ? 'film-card__head' : ''}`}>
           <Logo light></Logo>
-
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
+          <UserBlock isSignedIn={isSignedIn}></UserBlock>
         </header>
 
         <div className="film-card__wrap">
@@ -90,7 +83,12 @@ function MainPage({changeGenre}) {
 
 MainPage.propTypes = {
   changeGenre: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.bool.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   changeGenre(genre) {
@@ -99,4 +97,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export { MainPage };
-export default connect(null, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
