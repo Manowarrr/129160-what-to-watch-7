@@ -19,8 +19,28 @@ export const login = ({login: email, password}) => (dispatch, _getState, api) =>
     .then(() => dispatch(ActionCreator.redirectToRoute(AppRoute.ROOT)))
 );
 
+export const addComment = ({rating , comment, id}) => (dispatch, _getState, api) => (
+  api.post(`${APIRoute.REVIEWS}/${id}`, {rating, comment})
+    .then(() => dispatch(ActionCreator.redirectToRoute(`${APIRoute.FILMS}/${id}`)))
+);
+
 export const logout = () => (dispatch, _getState, api) => (
   api.delete(APIRoute.LOGOUT)
     .then(() => localStorage.removeItem('token'))
     .then(() => dispatch(ActionCreator.logout()))
+);
+
+export const fetchFilm = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.FILMS}/${id}`)
+    .then(({data}) => dispatch(ActionCreator.loadFilm(data)))
+);
+
+export const fetchSimilarFilms = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.FILMS}/${id}/similar`)
+    .then(({data}) => dispatch(ActionCreator.loadSimilarFilms(data)))
+);
+
+export const fetchReviews = (id) => (dispatch, _getState, api) => (
+  api.get(`${APIRoute.REVIEWS}/${id}`)
+    .then(({data}) => dispatch(ActionCreator.loadReviews(data)))
 );

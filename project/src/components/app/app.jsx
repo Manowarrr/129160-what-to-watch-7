@@ -17,8 +17,7 @@ import { isCheckedAuth } from '../../util';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
 
-function App(props) {
-  const {films, authorizationStatus, isDataLoaded} = props;
+function App({films, authorizationStatus, isDataLoaded}) {
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
@@ -35,13 +34,16 @@ function App(props) {
         <Route exact path={AppRoute.LOGIN}>
           <SignIn />
         </Route>
-        <Route exact path={AppRoute.FILM}>
-          <FilmPage films={films}/>
+        <Route
+          exact
+          path={AppRoute.FILM}
+          render={(props) => <FilmPage {...props}/>}
+        >
         </Route>
         <PrivateRoute
           exact
           path={AppRoute.REVIEW}
-          render={() => <AddReview />}
+          render={(props) => <AddReview {...props}/>}
         >
         </PrivateRoute>
         <Route exact path={AppRoute.PLAYER}>

@@ -1,12 +1,20 @@
 import React, {useRef} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {addComment} from '../../store/api-actions';
 
-function AddReviewForm() {
+function AddReviewForm({onSubmit, filmId}) {
 
   const formRef = useRef(null);
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const ratingValue = new FormData(formRef.current).get('rating');
-    const reviewText = new FormData(formRef.current).get('review-text');
+
+    onSubmit({
+      id: filmId,
+      rating: +(new FormData(formRef.current).get('rating')),
+      comment: new FormData(formRef.current).get('review-text'),
+    });
   };
 
   return (
@@ -68,4 +76,17 @@ function AddReviewForm() {
   );
 }
 
-export default AddReviewForm;
+AddReviewForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  filmId: PropTypes.number.isRequired,
+};
+
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit(review) {
+    dispatch(addComment(review));
+  },
+});
+
+export {AddReviewForm};
+export default connect(null, mapDispatchToProps)(AddReviewForm);
