@@ -2,7 +2,6 @@ import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {login} from '../../store/api-actions';
-import {AppRoute} from '../../const';
 import Logo from '../logo/logo';
 
 function SignIn({onSubmit}) {

@@ -1,16 +1,36 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Logo from '../logo/logo';
 import FilmCardListSimilar from '../film-card-list-similar/film-card-list-similar';
 import FilmPageTabs from '../film-page-tabs/film-page-tabs';
+import LoadingScreen from '../loading-screen/loading-screen';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import filmCardProp from '../film-card/film-card.prop';
 import reviewProp from '../review/review.prop';
+import { connect } from 'react-redux';
+import {fetchFilm, fetchSimilarFilms, fetchReviews} from '../../store/api-actions';
+import { ActionCreator } from '../../store/action';
+import {AuthorizationStatus} from '../../const';
 
-function FilmPage({films, reviews}) {
-  const { id } = useParams();
-  const [ film ] = films.filter((element) => element.id === Number.parseInt(id, 10));
-  const filmComments = reviews.filter((review) => review.id === Number.parseInt(id, 10));
+function FilmPage({film, isFilmDataLoaded, similarFilms, reviews, loadFilm, loadReviews, loadSimilarFilms, clearData, authorizationStatus}) {
+  const {id} = useParams();
+  const isSignedIn = authorizationStatus === AuthorizationStatus.AUTH;
+
+  useEffect(() => {
+    loadFilm(id);
+    loadSimilarFilms(id);
+    loadReviews(id);
+
+    return () => {
+      clearData();
+    };
+  }, [id]);
+
+  if (!isFilmDataLoaded) {
+    return <LoadingScreen />;
+  }
 
   return (
     <React.Fragment>
@@ -25,16 +45,7 @@ function FilmPage({films, reviews}) {
           <header className="page-header film-card__head">
             <Logo light></Logo>
 
-            <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
-              </li>
-            </ul>
+            <UserBlock isSignedIn={isSignedIn}></UserBlock>
           </header>
 
           <div className="film-card__wrap">
@@ -58,7 +69,7 @@ function FilmPage({films, reviews}) {
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link className="btn film-card__button" to={`${id}/review`}>Add review</Link>
+                {isSignedIn && <Link className="btn film-card__button" to={`${id}/review`}>Add review</Link>}
               </div>
             </div>
           </div>
@@ -70,7 +81,7 @@ function FilmPage({films, reviews}) {
               <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
             </div>
 
-            <FilmPageTabs film={film} reviews={filmComments}></FilmPageTabs>
+            <FilmPageTabs film={film} reviews={reviews}></FilmPageTabs>
 
           </div>
         </div>
@@ -80,7 +91,7 @@ function FilmPage({films, reviews}) {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmCardListSimilar films={films}></FilmCardListSimilar>
+          <FilmCardListSimilar films={similarFilms}></FilmCardListSimilar>
         </section>
 
         <footer className="page-footer">
@@ -96,8 +107,38 @@ function FilmPage({films, reviews}) {
 }
 
 FilmPage.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  film: filmCardProp,
+  similarFilms: PropTypes.arrayOf(filmCardProp).isRequired,
   reviews: PropTypes.arrayOf(reviewProp).isRequired,
+  loadFilm: PropTypes.func.isRequired,
+  loadSimilarFilms: PropTypes.func.isRequired,
+  loadReviews: PropTypes.func.isRequired,
+  clearData: PropTypes.func.isRequired,
+  isFilmDataLoaded: PropTypes.bool.isRequired,
 };
 
-export default FilmPage;
+const mapStateToProps = (state) => ({
+  film: state.film,
+  similarFilms: state.similarFilms,
+  reviews: state.reviews,
+  isFilmDataLoaded: state.isFilmDataLoaded,
+  authorizationStatus: state.authorizationStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadFilm(id) {
+    dispatch(fetchFilm(id));
+  },
+  loadSimilarFilms(id) {
+    dispatch(fetchSimilarFilms(id));
+  },
+  loadReviews(id) {
+    dispatch(fetchReviews(id));
+  },
+  clearData() {
+    dispatch(ActionCreator.clearFilm());
+  },
+});
+
+export { FilmPage };
+export default connect(mapStateToProps, mapDispatchToProps)(FilmPage);

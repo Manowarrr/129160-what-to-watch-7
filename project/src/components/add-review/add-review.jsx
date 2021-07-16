@@ -1,13 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Logo from '../logo/logo';
 import AddReviewForm from '../add-review-form/add-review-form';
+import LoadingScreen from '../loading-screen/loading-screen';
 import PropTypes from 'prop-types';
 import {Link, useParams} from 'react-router-dom';
 import filmCardProp from '../film-card/film-card.prop';
+import { connect } from 'react-redux';
+import {fetchFilm} from '../../store/api-actions';
+import { ActionCreator } from '../../store/action';
 
-function AddReview({films}) {
-  const { id } = useParams();
-  const [ film ] = films.filter((element) => element.id === Number.parseInt(id, 10));
+function AddReview({film, isFilmDataLoaded, loadFilm, clearData}) {
+  const {id} = useParams();
+
+  useEffect(() => {
+    loadFilm(id);
+
+    return () => {
+      clearData();
+    };
+  }, [id]);
+
+  if (!isFilmDataLoaded) {
+    return <LoadingScreen />;
+  }
 
   return (
     <section className="film-card film-card--full">
@@ -48,13 +63,31 @@ function AddReview({films}) {
           <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
         </div>
       </div>
-      <AddReviewForm></AddReviewForm>
+      <AddReviewForm filmId={film.id}></AddReviewForm>
     </section>
   );
 }
 
 AddReview.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
+  film: filmCardProp,
+  loadFilm: PropTypes.func.isRequired,
+  clearData: PropTypes.func.isRequired,
+  isFilmDataLoaded: PropTypes.bool.isRequired,
 };
 
-export default AddReview;
+const mapStateToProps = (state) => ({
+  film: state.film,
+  isFilmDataLoaded: state.isFilmDataLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadFilm(id) {
+    dispatch(fetchFilm(id));
+  },
+  clearData() {
+    dispatch(ActionCreator.clearFilm());
+  },
+});
+
+export { AddReview };
+export default connect(mapStateToProps, mapDispatchToProps)(AddReview);

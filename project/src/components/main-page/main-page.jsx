@@ -83,7 +83,7 @@ function MainPage({changeGenre, authorizationStatus}) {
 
 MainPage.propTypes = {
   changeGenre: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.bool.isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
