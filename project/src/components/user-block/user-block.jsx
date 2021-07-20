@@ -1,10 +1,18 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
 import {logout} from '../../store/api-actions';
 
-function UserBlock({isSignedIn, logoff}) {
+function UserBlock({isSignedIn}) {
+  const dispatch = useDispatch();
+
+  const handleClick = (evt) => {
+    evt.preventDefault();
+
+    dispatch(logout());
+  };
+
   return (
     isSignedIn ?
       <ul className="user-block">
@@ -14,7 +22,7 @@ function UserBlock({isSignedIn, logoff}) {
           </div>
         </li>
         <li className="user-block__item">
-          <Link onClick={logoff} to="/" className="user-block__link">Sign out</Link>
+          <Link onClick={handleClick} to="/" className="user-block__link">Sign out</Link>
         </li>
       </ul> :
       <ul className="user-block">
@@ -25,15 +33,6 @@ function UserBlock({isSignedIn, logoff}) {
 
 UserBlock.propTypes = {
   isSignedIn: PropTypes.bool.isRequired,
-  logoff: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  logoff() {
-    dispatch(logout());
-  },
-});
-
-export {UserBlock};
-
-export default connect(null, mapDispatchToProps)(UserBlock);
+export default UserBlock;

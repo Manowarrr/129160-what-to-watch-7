@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
-import filmCardProp from '../film-card/film-card.prop';
+import {useSelector} from 'react-redux';
 import FilmCard from '../film-card/film-card';
 import ShowmoreBtn from '../showmore-btn/showmore-btn';
-import { connect } from 'react-redux';
 import { filterFilmsByGenre } from '../../util';
+import {getFilms, getGenre} from '../../store/main-data/selectors';
 
-function FilmCardList ({films}) {
+function FilmCardList () {
+  const genre = useSelector(getGenre);
+  const films = useSelector(getFilms);
+  const filmsFilteredByGenre = filterFilmsByGenre(films, genre);
+
   const [activeFilm, setActiveFilm] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showFilmsCount, setShowFilmsCount] = useState(8);
@@ -25,7 +28,7 @@ function FilmCardList ({films}) {
     <React.Fragment>
       <div className="catalog__films-list">
         {
-          films.slice(0, showFilmsCount).map(
+          filmsFilteredByGenre.slice(0, showFilmsCount).map(
             (film) => (
               <FilmCard
                 key={film.id}
@@ -38,20 +41,11 @@ function FilmCardList ({films}) {
         }
       </div>
       {
-        showFilmsCount < films.length &&
+        showFilmsCount < filmsFilteredByGenre.length &&
         <ShowmoreBtn handleShowmoreBtnClick={handleShowmoreBtnClick}></ShowmoreBtn>
       }
     </React.Fragment>
   );
 }
 
-FilmCardList.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  films: filterFilmsByGenre(state.films, state.genre),
-});
-
-export { FilmCardList };
-export default connect(mapStateToProps, null)(FilmCardList);
+export default FilmCardList;

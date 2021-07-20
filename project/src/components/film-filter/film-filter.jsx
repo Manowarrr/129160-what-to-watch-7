@@ -1,14 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import filmCardProp from '../film-card/film-card.prop';
-import { connect } from 'react-redux';
-import { ActionCreator } from '../../store/action';
+import {useSelector,  useDispatch} from 'react-redux';
+import {changeGenre} from '../../store/action';
 import {BASE_GENRE} from '../../const';
+import {getFilms, getGenre} from '../../store/main-data/selectors';
 
-function FilmFilter({films, genre, onGenreChange}) {
+function FilmFilter() {
+  const dispatch = useDispatch();
+  const films = useSelector(getFilms);
+  const genre = useSelector(getGenre);
   const genres = [...new Set([BASE_GENRE, ...films.map((film) => film.genre)])];
 
-  const handleFilterClick = (filter) => onGenreChange(filter);
+  const handleFilterClick = (filter) => dispatch(changeGenre(filter));
 
   return (
     <ul className="catalog__genres-list">
@@ -32,22 +34,4 @@ function FilmFilter({films, genre, onGenreChange}) {
   );
 }
 
-FilmFilter.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-  genre: PropTypes.string.isRequired,
-  onGenreChange: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  genre: state.genre,
-  films: state.films,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGenreChange(genre) {
-    dispatch(ActionCreator.changeGenre(genre));
-  },
-});
-
-export { FilmFilter };
-export default connect(mapStateToProps, mapDispatchToProps)(FilmFilter);
+export default FilmFilter;

@@ -1,32 +1,38 @@
 import React, {useEffect} from 'react';
+import {useSelector,  useDispatch} from 'react-redux';
 import Logo from '../logo/logo';
 import FilmCardListSimilar from '../film-card-list-similar/film-card-list-similar';
 import FilmPageTabs from '../film-page-tabs/film-page-tabs';
 import LoadingScreen from '../loading-screen/loading-screen';
-import NotFoundScreen from '../not-found-screen/not-found-screen';
+//import NotFoundScreen from '../not-found-screen/not-found-screen';
 import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
-import PropTypes from 'prop-types';
-import filmCardProp from '../film-card/film-card.prop';
-import reviewProp from '../review/review.prop';
-import { connect } from 'react-redux';
 import {fetchFilm, fetchSimilarFilms, fetchReviews} from '../../store/api-actions';
-import { ActionCreator } from '../../store/action';
+import {getFilm, getIsFilmDataLoaded, getSimilarFilms, getReviews} from '../../store/film-data/selectors';
+import {getAuthorizationStatus} from '../../store/user/selectors';
+import {clearFilm} from '../../store/action';
 import {AuthorizationStatus} from '../../const';
 
-function FilmPage({film, isFilmDataLoaded, similarFilms, reviews, loadFilm, loadReviews, loadSimilarFilms, clearData, authorizationStatus}) {
+function FilmPage() {
   const {id} = useParams();
-  const isSignedIn = authorizationStatus === AuthorizationStatus.AUTH;
+  const dispatch = useDispatch();
+
+  const isSignedIn = useSelector(getAuthorizationStatus) === AuthorizationStatus.AUTH;
 
   useEffect(() => {
-    loadFilm(id);
-    loadSimilarFilms(id);
-    loadReviews(id);
+    dispatch(fetchFilm(id));
+    dispatch(fetchSimilarFilms(id));
+    dispatch(fetchReviews(id));
 
     return () => {
-      clearData();
+      dispatch(clearFilm());
     };
   }, [id]);
+
+  const film = useSelector(getFilm);
+  const isFilmDataLoaded = useSelector(getIsFilmDataLoaded);
+  const similarFilms = useSelector(getSimilarFilms);
+  const reviews = useSelector(getReviews);
 
   if (!isFilmDataLoaded) {
     return <LoadingScreen />;
@@ -106,39 +112,4 @@ function FilmPage({film, isFilmDataLoaded, similarFilms, reviews, loadFilm, load
   );
 }
 
-FilmPage.propTypes = {
-  film: filmCardProp,
-  similarFilms: PropTypes.arrayOf(filmCardProp).isRequired,
-  reviews: PropTypes.arrayOf(reviewProp).isRequired,
-  loadFilm: PropTypes.func.isRequired,
-  loadSimilarFilms: PropTypes.func.isRequired,
-  loadReviews: PropTypes.func.isRequired,
-  clearData: PropTypes.func.isRequired,
-  isFilmDataLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  film: state.film,
-  similarFilms: state.similarFilms,
-  reviews: state.reviews,
-  isFilmDataLoaded: state.isFilmDataLoaded,
-  authorizationStatus: state.authorizationStatus,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  loadFilm(id) {
-    dispatch(fetchFilm(id));
-  },
-  loadSimilarFilms(id) {
-    dispatch(fetchSimilarFilms(id));
-  },
-  loadReviews(id) {
-    dispatch(fetchReviews(id));
-  },
-  clearData() {
-    dispatch(ActionCreator.clearFilm());
-  },
-});
-
-export { FilmPage };
-export default connect(mapStateToProps, mapDispatchToProps)(FilmPage);
+export default FilmPage;
