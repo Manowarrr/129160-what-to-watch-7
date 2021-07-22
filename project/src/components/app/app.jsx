@@ -1,8 +1,7 @@
 import React from 'react';
 import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 import {AppRoute} from '../../const';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {useSelector} from 'react-redux';
 import MainPage from '../main-page/main-page';
 import AddReview from '../add-review/add-review';
 import FilmPage from '../film-page/film-page';
@@ -11,13 +10,16 @@ import Player from '../player/player';
 import LoadingScreen from '../loading-screen/loading-screen';
 import SignIn from '../sign-in/sign-in';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import filmCardProp from '../film-card/film-card.prop';
-//import reviewProp from '../review/review.prop';
-import { isCheckedAuth } from '../../util';
+import {getIsDataLoaded} from '../../store/main-data/selectors';
+import {getAuthorizationStatus} from '../../store/user/selectors';
+import {isCheckedAuth} from '../../util';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
 
-function App({films, authorizationStatus, isDataLoaded}) {
+function App() {
+
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isDataLoaded = useSelector(getIsDataLoaded);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
@@ -47,7 +49,7 @@ function App({films, authorizationStatus, isDataLoaded}) {
         >
         </PrivateRoute>
         <Route exact path={AppRoute.PLAYER}>
-          <Player films={films}/>
+          <Player />
         </Route>
         <PrivateRoute
           exact
@@ -63,17 +65,4 @@ function App({films, authorizationStatus, isDataLoaded}) {
   );
 }
 
-App.propTypes = {
-  films: PropTypes.arrayOf(filmCardProp).isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  isDataLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-  isDataLoaded: state.isDataLoaded,
-  films: state.films,
-});
-
-export {App};
-export default connect(mapStateToProps, null)(App);
+export default App;

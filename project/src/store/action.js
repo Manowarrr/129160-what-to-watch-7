@@ -1,3 +1,5 @@
+import {createAction} from '@reduxjs/toolkit';
+
 export const ActionType = {
   CHANGE_GENRE: 'CHANGE_GENRE',
   GET_FILMS_BY_GENRE: 'GET_FILMS_BY_GENRE',
@@ -11,42 +13,36 @@ export const ActionType = {
   LOAD_REVIEWS: 'data/loadReviews',
 };
 
-export const ActionCreator = {
-  changeGenre: (genre) => ({
-    type: ActionType.CHANGE_GENRE,
-    payload: genre,
-  }),
-  getFilmsByGenre: () => ({
-    type: ActionType.GET_FILMS_BY_GENRE,
-  }),
-  loadFilms: (films) => ({
-    type: ActionType.LOAD_FILMS,
-    payload: films,
-  }),
-  loadSimilarFilms: (films) => ({
-    type: ActionType.LOAD_SIMILAR_FILMS,
-    payload: films,
-  }),
-  loadFilm: (film) => ({
-    type: ActionType.LOAD_FILM,
-    payload: film,
-  }),
-  clearFilm: () => ({
-    type: ActionType.CLEAR_FILM,
-  }),
-  loadReviews: (reviews) => ({
-    type: ActionType.LOAD_REVIEWS,
-    payload: reviews,
-  }),
-  requireAuthorization: (status) => ({
-    type: ActionType.REQUIRED_AUTHORIZATION,
-    payload: status,
-  }),
-  logout: () => ({
-    type: ActionType.LOGOUT,
-  }),
-  redirectToRoute: (url) => ({
-    type: ActionType.REDIRECT_TO_ROUTE,
-    payload: url,
-  }),
-};
+export const changeGenre = createAction(ActionType.CHANGE_GENRE, (genre) => ({
+  payload: genre,
+}));
+
+export const getFilmsByGenre = createAction(ActionType.GET_FILMS_BY_GENRE);
+
+export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({
+  payload: films,
+}));
+
+export const loadSimilarFilms = createAction(ActionType.LOAD_SIMILAR_FILMS, (films) => ({
+  payload: films,
+}));
+
+export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({
+  payload: film,
+}));
+
+export const clearFilm = createAction(ActionType.CLEAR_FILM);
+
+export const loadReviews = createAction(ActionType.LOAD_REVIEWS, (reviews) => ({
+  payload: reviews,
+}));
+
+export const requireAuthorization = createAction(ActionType.REQUIRED_AUTHORIZATION, (status) => ({
+  payload: status,
+}));
+
+export const logout = createAction(ActionType.LOGOUT);
+
+export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({
+  payload: url,
+}));

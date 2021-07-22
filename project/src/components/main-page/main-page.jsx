@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import {useSelector, useDispatch} from 'react-redux';
 import FilmCardList from '../film-card-list/film-card-list';
 import FilmFilter from '../film-filter/film-filter';
 import UserBlock from '../user-block/user-block';
 import Logo from '../logo/logo';
-import { connect } from 'react-redux';
-import { ActionCreator } from '../../store/action';
-import { BASE_GENRE, AuthorizationStatus } from '../../const';
+import {changeGenre} from '../../store/action';
+import {BASE_GENRE, AuthorizationStatus} from '../../const';
+import {getAuthorizationStatus} from '../../store/user/selectors';
 
-function MainPage({changeGenre, authorizationStatus}) {
-  useEffect(() => changeGenre(BASE_GENRE));
-
-  const isSignedIn = authorizationStatus === AuthorizationStatus.AUTH;
+function MainPage() {
+  const dispatch = useDispatch();
+  const isSignedIn = useSelector(getAuthorizationStatus) === AuthorizationStatus.AUTH;
+  useEffect(() => dispatch(changeGenre(BASE_GENRE)));
 
   return (
     <React.Fragment>
@@ -81,20 +81,4 @@ function MainPage({changeGenre, authorizationStatus}) {
   );
 }
 
-MainPage.propTypes = {
-  changeGenre: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  changeGenre(genre) {
-    dispatch(ActionCreator.changeGenre(genre));
-  },
-});
-
-export { MainPage };
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default MainPage;

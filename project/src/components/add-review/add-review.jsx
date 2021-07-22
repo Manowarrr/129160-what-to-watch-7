@@ -1,22 +1,24 @@
 import React, {useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import Logo from '../logo/logo';
 import AddReviewForm from '../add-review-form/add-review-form';
 import LoadingScreen from '../loading-screen/loading-screen';
-import PropTypes from 'prop-types';
 import {Link, useParams} from 'react-router-dom';
-import filmCardProp from '../film-card/film-card.prop';
-import { connect } from 'react-redux';
 import {fetchFilm} from '../../store/api-actions';
-import { ActionCreator } from '../../store/action';
+import {clearFilm} from '../../store/action';
+import {getFilm, getIsFilmDataLoaded} from '../../store/film-data/selectors';
 
-function AddReview({film, isFilmDataLoaded, loadFilm, clearData}) {
+function AddReview() {
   const {id} = useParams();
+  const dispatch = useDispatch();
+  const isFilmDataLoaded = useSelector(getIsFilmDataLoaded);
+  const film = useSelector(getFilm);
 
   useEffect(() => {
-    loadFilm(id);
+    dispatch(fetchFilm(id));
 
     return () => {
-      clearData();
+      dispatch(clearFilm());
     };
   }, [id]);
 
@@ -68,26 +70,4 @@ function AddReview({film, isFilmDataLoaded, loadFilm, clearData}) {
   );
 }
 
-AddReview.propTypes = {
-  film: filmCardProp,
-  loadFilm: PropTypes.func.isRequired,
-  clearData: PropTypes.func.isRequired,
-  isFilmDataLoaded: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  film: state.film,
-  isFilmDataLoaded: state.isFilmDataLoaded,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  loadFilm(id) {
-    dispatch(fetchFilm(id));
-  },
-  clearData() {
-    dispatch(ActionCreator.clearFilm());
-  },
-});
-
-export { AddReview };
-export default connect(mapStateToProps, mapDispatchToProps)(AddReview);
+export default AddReview;
