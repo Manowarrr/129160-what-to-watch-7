@@ -18,6 +18,8 @@ export const APIRoute = {
   REVIEWS: '/comments',
   LOGIN: '/login',
   LOGOUT: '/logout',
+  UPDATE_FILM: '/favorite',
+  FAVORITE_FILMS: '/favorite',
 };
 
 export const BASE_GENRE = 'All genres';

@@ -17,9 +17,11 @@ function UserBlock({isSignedIn}) {
     isSignedIn ?
       <ul className="user-block">
         <li className="user-block__item">
-          <div className="user-block__avatar">
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-          </div>
+          <Link to={'/mylist'}>
+            <div className="user-block__avatar">
+              <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+            </div>
+          </Link>
         </li>
         <li className="user-block__item">
           <Link onClick={handleClick} to="/" className="user-block__link">Sign out</Link>

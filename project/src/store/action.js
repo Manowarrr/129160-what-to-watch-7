@@ -8,9 +8,11 @@ export const ActionType = {
   REDIRECT_TO_ROUTE: 'user/redirectToRoute',
   LOAD_FILMS: 'data/loadFilms',
   LOAD_SIMILAR_FILMS: 'data/loadSimilarFilms',
+  LOAD_FAVORITE_FILMS: 'data/loadFavoriteFilms',
   LOAD_FILM: 'data/loadFilm',
   CLEAR_FILM: 'data/clearFilm',
   LOAD_REVIEWS: 'data/loadReviews',
+  UPDATE_FILMS: 'data/updateFilms',
 };
 
 export const changeGenre = createAction(ActionType.CHANGE_GENRE, (genre) => ({
@@ -23,7 +25,15 @@ export const loadFilms = createAction(ActionType.LOAD_FILMS, (films) => ({
   payload: films,
 }));
 
+export const updateFilms = createAction(ActionType.UPDATE_FILMS, (film) => ({
+  payload: film,
+}));
+
 export const loadSimilarFilms = createAction(ActionType.LOAD_SIMILAR_FILMS, (films) => ({
+  payload: films,
+}));
+
+export const loadFavoriteFilms = createAction(ActionType.LOAD_FAVORITE_FILMS, (films) => ({
   payload: films,
 }));
 
