@@ -7,7 +7,7 @@ import LoadingScreen from '../loading-screen/loading-screen';
 //import NotFoundScreen from '../not-found-screen/not-found-screen';
 import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
-import {fetchFilm, fetchSimilarFilms, fetchReviews} from '../../store/api-actions';
+import {fetchFilm, fetchSimilarFilms, fetchReviews, updateFilmStatus} from '../../store/api-actions';
 import {getFilm, getIsFilmDataLoaded, getSimilarFilms, getReviews} from '../../store/film-data/selectors';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 import {clearFilm} from '../../store/action';
@@ -38,6 +38,10 @@ function FilmPage() {
     return <LoadingScreen />;
   }
 
+  const handleFavoriteBtnClick = () => {
+    dispatch(updateFilmStatus(id, film.isFavorite ? 0 : 1));
+  };
+
   return (
     <React.Fragment>
       <section className="film-card film-card--full">
@@ -63,16 +67,24 @@ function FilmPage() {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <Link className="btn film-card__button" to={`/player/${id}`}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
+                </Link>
+                <button
+                  className="btn btn--list film-card__button"
+                  type="button"
+                  onClick={handleFavoriteBtnClick}
+                >
+                  {film.isFavorite ?
+                    <svg viewBox="0 0 18 14" width="18" height="14">
+                      <use xlinkHref="#in-list"></use>
+                    </svg> :
+                    <svg viewBox="0 0 19 20" width="19" height="20">
+                      <use xlinkHref="#add"></use>
+                    </svg>}
                   <span>My list</span>
                 </button>
                 {isSignedIn && <Link className="btn film-card__button" to={`${id}/review`}>Add review</Link>}
