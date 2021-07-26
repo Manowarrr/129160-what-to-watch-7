@@ -10,7 +10,7 @@ import Player from '../player/player';
 import LoadingScreen from '../loading-screen/loading-screen';
 import SignIn from '../sign-in/sign-in';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import {getIsDataLoaded} from '../../store/main-data/selectors';
+import {getIsDataLoaded, getIsPromoFilmLoaded} from '../../store/main-data/selectors';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 import {isCheckedAuth} from '../../util';
 import PrivateRoute from '../private-route/private-route';
@@ -20,8 +20,9 @@ function App() {
 
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const isDataLoaded = useSelector(getIsDataLoaded);
+  const isPromoFilmLoaded = useSelector(getIsPromoFilmLoaded);
 
-  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded || !isPromoFilmLoaded) {
     return (
       <LoadingScreen />
     );
@@ -54,7 +55,7 @@ function App() {
         <PrivateRoute
           exact
           path={AppRoute.LIST}
-          render={() => <MyList />}
+          render={(props) => <MyList {...props}/>}
         >
         </PrivateRoute>
         <Route>

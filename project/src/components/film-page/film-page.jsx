@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {useSelector,  useDispatch} from 'react-redux';
 import Logo from '../logo/logo';
+import MyListBtn from '../my-list-btn/my-list-btn';
 import FilmCardListSimilar from '../film-card-list-similar/film-card-list-similar';
 import FilmPageTabs from '../film-page-tabs/film-page-tabs';
 import LoadingScreen from '../loading-screen/loading-screen';
 //import NotFoundScreen from '../not-found-screen/not-found-screen';
 import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
-import {fetchFilm, fetchSimilarFilms, fetchReviews, updateFilmStatus} from '../../store/api-actions';
+import {fetchFilm, fetchSimilarFilms, fetchReviews} from '../../store/api-actions';
 import {getFilm, getIsFilmDataLoaded, getSimilarFilms, getReviews} from '../../store/film-data/selectors';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 import {clearFilm} from '../../store/action';
@@ -37,10 +38,6 @@ function FilmPage() {
   if (!isFilmDataLoaded) {
     return <LoadingScreen />;
   }
-
-  const handleFavoriteBtnClick = () => {
-    dispatch(updateFilmStatus(id, film.isFavorite ? 0 : 1));
-  };
 
   return (
     <React.Fragment>
@@ -73,20 +70,7 @@ function FilmPage() {
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button
-                  className="btn btn--list film-card__button"
-                  type="button"
-                  onClick={handleFavoriteBtnClick}
-                >
-                  {film.isFavorite ?
-                    <svg viewBox="0 0 18 14" width="18" height="14">
-                      <use xlinkHref="#in-list"></use>
-                    </svg> :
-                    <svg viewBox="0 0 19 20" width="19" height="20">
-                      <use xlinkHref="#add"></use>
-                    </svg>}
-                  <span>My list</span>
-                </button>
+                <MyListBtn film={film}></MyListBtn>
                 {isSignedIn && <Link className="btn film-card__button" to={`${id}/review`}>Add review</Link>}
               </div>
             </div>

@@ -15,7 +15,7 @@ function FilmFilter() {
   return (
     <ul className="catalog__genres-list">
       {
-        genres.map(
+        genres.slice(0, 9).map(
           (item) => (
             <li
               key={item}

@@ -4,20 +4,24 @@ import FilmCardList from '../film-card-list/film-card-list';
 import FilmFilter from '../film-filter/film-filter';
 import UserBlock from '../user-block/user-block';
 import Logo from '../logo/logo';
+import MyListBtn from '../my-list-btn/my-list-btn';
 import {changeGenre} from '../../store/action';
 import {BASE_GENRE, AuthorizationStatus} from '../../const';
 import {getAuthorizationStatus} from '../../store/user/selectors';
+import {getPromoFilm} from '../../store/main-data/selectors';
 
 function MainPage() {
   const dispatch = useDispatch();
   const isSignedIn = useSelector(getAuthorizationStatus) === AuthorizationStatus.AUTH;
+  const promoFilm = useSelector(getPromoFilm);
+
   useEffect(() => dispatch(changeGenre(BASE_GENRE)));
 
   return (
     <React.Fragment>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={promoFilm.backgroundImage} alt={promoFilm.name} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -30,14 +34,14 @@ function MainPage() {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={promoFilm.posterImage} alt={`${promoFilm.name} poster`} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{promoFilm.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{promoFilm.genre}</span>
+                <span className="film-card__year">{promoFilm.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -47,12 +51,7 @@ function MainPage() {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <MyListBtn film={promoFilm} isPromo></MyListBtn>
               </div>
             </div>
           </div>

@@ -7,9 +7,11 @@ export const ActionType = {
   LOGOUT: 'user/logout',
   REDIRECT_TO_ROUTE: 'user/redirectToRoute',
   LOAD_FILMS: 'data/loadFilms',
+  LOAD_PROMO_FILM: 'data/loadPromoFilm',
   LOAD_SIMILAR_FILMS: 'data/loadSimilarFilms',
   LOAD_FAVORITE_FILMS: 'data/loadFavoriteFilms',
   LOAD_FILM: 'data/loadFilm',
+  UPDATE_FILM: 'data/updateFilm',
   CLEAR_FILM: 'data/clearFilm',
   LOAD_REVIEWS: 'data/loadReviews',
   UPDATE_FILMS: 'data/updateFilms',
@@ -38,6 +40,10 @@ export const loadFavoriteFilms = createAction(ActionType.LOAD_FAVORITE_FILMS, (f
 }));
 
 export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({
+  payload: film,
+}));
+
+export const loadPromoFilm = createAction(ActionType.LOAD_PROMO_FILM, (film) => ({
   payload: film,
 }));
 
