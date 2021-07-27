@@ -6,7 +6,7 @@ import { createAPI } from './services/api';
 import { Provider } from 'react-redux';
 import rootReducer from './store/root-reducer';
 import { requireAuthorization } from './store/action';
-import { checkAuth, fetchFilmList } from './store/api-actions';
+import { checkAuth, fetchFilmList, fetchPromoFilm } from './store/api-actions';
 import { AuthorizationStatus } from './const';
 import {redirect} from './store/middlewares/redirect';
 
@@ -26,6 +26,7 @@ const store = configureStore({
 
 store.dispatch(checkAuth());
 store.dispatch(fetchFilmList());
+store.dispatch(fetchPromoFilm());
 
 ReactDOM.render(
   <React.StrictMode>

@@ -20,6 +20,7 @@ export const APIRoute = {
   LOGOUT: '/logout',
   UPDATE_FILM: '/favorite',
   FAVORITE_FILMS: '/favorite',
+  PROMO_FILM: '/promo',
 };
 
 export const BASE_GENRE = 'All genres';

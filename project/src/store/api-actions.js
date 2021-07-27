@@ -1,4 +1,4 @@
-import {requireAuthorization, redirectToRoute, logout as closeSession, loadFilm, loadFilms, loadSimilarFilms, loadReviews, updateFilms, loadFavoriteFilms} from './action';
+import {requireAuthorization, redirectToRoute, logout as closeSession, loadFilm, loadFilms, loadSimilarFilms, loadReviews, updateFilms, loadFavoriteFilms, loadPromoFilm} from './action';
 import {AuthorizationStatus, APIRoute, AppRoute} from '../const';
 
 export const fetchFilmList = () => (dispatch, _getState, api) => (
@@ -56,4 +56,9 @@ export const updateFilmStatus = (id, status) => (dispatch, _getState, api) => (
       dispatch(loadFilm(data));
       dispatch(updateFilms(data));
     })
+);
+
+export const fetchPromoFilm = () => (dispatch, _getState, api) => (
+  api.get(APIRoute.PROMO_FILM)
+    .then(({data})=> dispatch(loadPromoFilm(data)))
 );
