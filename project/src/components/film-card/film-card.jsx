@@ -14,10 +14,13 @@ function FilmCard({film, onMouseEnter, onMouseLeave, active}) {
       onMouseEnter={handleOnMouseEnter}
       onMouseLeave={handleOnMouseLeave}
     >
-      <div className="small-film-card__image">
-        {active ? <VideoPlayer poster={film.posterImage} video={film.previewVideoLink}></VideoPlayer> :
-          <img src={film.posterImage} alt={film.name} width='280' height='175' />}
-      </div>
+      <Link to={`/films/${film.id}`}>
+        <div className="small-film-card__image">
+          {active ?
+            <VideoPlayer poster={film.posterImage} video={film.previewVideoLink}></VideoPlayer> :
+            <img src={film.posterImage} alt={film.name} width='280' height='175' />}
+        </div>
+      </Link>
       <h3 className="small-film-card__title">
         <Link className="small-film-card__link" to={`/films/${film.id}`}>{film.name}</Link>
       </h3>

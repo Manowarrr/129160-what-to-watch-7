@@ -2,7 +2,9 @@ import React from 'react';
 
 function LoadingScreen() {
   return (
-    <p>Loading ...</p>
+    <div className="spinner">
+      <div className="sp sp-circle"></div>
+    </div>
   );
 }
 

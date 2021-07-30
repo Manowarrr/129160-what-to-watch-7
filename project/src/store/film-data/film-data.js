@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {loadSimilarFilms, loadFilm, clearFilm, loadReviews} from '../action';
+import {loadSimilarFilms, loadFilm, clearFilm, loadReviews, loadPromoFilm, updateFilm} from '../action';
 import { adaptFilm } from '../adapter';
 
 const initialState = {
@@ -7,6 +7,8 @@ const initialState = {
   reviews: [],
   film: null,
   isFilmDataLoaded: false,
+  isPromoFilmLoaded: false,
+  promoFilm: null,
 };
 
 const filmData = createReducer(initialState, (builder) => {
@@ -18,6 +20,17 @@ const filmData = createReducer(initialState, (builder) => {
       state.film = adaptFilm(action.payload);
       state.isFilmDataLoaded = true;
     })
+    .addCase(updateFilm, (state, action) => {
+      const film = adaptFilm(action.payload);
+      if(state.film === null) {
+        state.promoFilm = film;
+      } else if(state.promoFilm.id === action.payload.id) {
+        state.film = film;
+        state.promoFilm = film;
+      } else {
+        state.film = film;
+      }
+    })
     .addCase(clearFilm, (state) => {
       state.film = null;
       state.isFilmDataLoaded = false;
@@ -26,6 +39,10 @@ const filmData = createReducer(initialState, (builder) => {
     })
     .addCase(loadReviews, (state, action) => {
       state.reviews = action.payload;
+    })
+    .addCase(loadPromoFilm, (state, action) => {
+      state.promoFilm = adaptFilm(action.payload);
+      state.isPromoFilmLoaded = true;
     });
 });
 

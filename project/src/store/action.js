@@ -15,6 +15,7 @@ export const ActionType = {
   CLEAR_FILM: 'data/clearFilm',
   LOAD_REVIEWS: 'data/loadReviews',
   UPDATE_FILMS: 'data/updateFilms',
+  SHOW_ERROR: 'user/showError',
 };
 
 export const changeGenre = createAction(ActionType.CHANGE_GENRE, (genre) => ({
@@ -43,6 +44,10 @@ export const loadFilm = createAction(ActionType.LOAD_FILM, (film) => ({
   payload: film,
 }));
 
+export const updateFilm = createAction(ActionType.UPDATE_FILM, (film) => ({
+  payload: film,
+}));
+
 export const loadPromoFilm = createAction(ActionType.LOAD_PROMO_FILM, (film) => ({
   payload: film,
 }));
@@ -62,3 +67,9 @@ export const logout = createAction(ActionType.LOGOUT);
 export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) => ({
   payload: url,
 }));
+
+export const showError = createAction(ActionType.SHOW_ERROR, (error) => ({
+  payload: error,
+}));
+
+

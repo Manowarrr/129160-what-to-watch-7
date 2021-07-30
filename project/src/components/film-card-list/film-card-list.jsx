@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import FilmCard from '../film-card/film-card';
 import ShowmoreBtn from '../showmore-btn/showmore-btn';
-import { filterFilmsByGenre } from '../../util';
+import {filterFilmsByGenre} from '../../util';
 import {getFilms, getGenre} from '../../store/main-data/selectors';
 
 function FilmCardList () {

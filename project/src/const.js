@@ -5,6 +5,7 @@ export const AppRoute = {
   REVIEW: '/films/:id/review',
   PLAYER: '/player/:id',
   ROOT: '/',
+  NOT_FOUND: '/not-found',
 };
 
 export const AuthorizationStatus = {
@@ -24,3 +25,11 @@ export const APIRoute = {
 };
 
 export const BASE_GENRE = 'All genres';
+
+export const Rating = {
+  BAD: 'Bad',
+  NORMAL: 'Normal',
+  GOOD: 'Good',
+  VERY_GOOD: 'Very good',
+  AWESOME: 'Awesome',
+};
