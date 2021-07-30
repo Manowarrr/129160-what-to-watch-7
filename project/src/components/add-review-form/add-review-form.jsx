@@ -1,19 +1,34 @@
-import React, {useRef} from 'react';
+import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import PropTypes from 'prop-types';
 import {addComment} from '../../store/api-actions';
 
+const MIN_COMMENT_LENGTH = 50;
+const MAX_COMMENT_LENGTH = 400;
+
 function AddReviewForm({filmId}) {
   const dispatch = useDispatch();
-  const formRef = useRef(null);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+  const isDisabled = rating === 0 || reviewText.length < MIN_COMMENT_LENGTH || reviewText.length > MAX_COMMENT_LENGTH;
+
+  function handleRatingChange(evt) {
+    evt.preventDefault();
+    setRating(Number(evt.target.value));
+  }
+
+  function handleReviewTextChange(evt) {
+    evt.preventDefault();
+    setReviewText(evt.target.value);
+  }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
     dispatch(addComment({
       id: filmId,
-      rating: +(new FormData(formRef.current).get('rating')),
-      comment: new FormData(formRef.current).get('review-text'),
+      rating: rating,
+      comment: reviewText,
     }));
   };
 
@@ -23,51 +38,49 @@ function AddReviewForm({filmId}) {
         action="#"
         className="add-review__form"
         onSubmit={handleSubmit}
-        ref={formRef}
       >
         <div className="rating">
-          <div className="rating__stars">
-            <input className="rating__input" id="star-10" type="radio" name="rating" value="10" />
-            <label className="rating__label" htmlFor="star-10">Rating 10</label>
-
-            <input className="rating__input" id="star-9" type="radio" name="rating" value="9" />
-            <label className="rating__label" htmlFor="star-9">Rating 9</label>
-
-            <input className="rating__input" id="star-8" type="radio" name="rating" value="8" />
-            <label className="rating__label" htmlFor="star-8">Rating 8</label>
-
-            <input className="rating__input" id="star-7" type="radio" name="rating" value="7" />
-            <label className="rating__label" htmlFor="star-7">Rating 7</label>
-
-            <input className="rating__input" id="star-6" type="radio" name="rating" value="6" />
-            <label className="rating__label" htmlFor="star-6">Rating 6</label>
-
-            <input className="rating__input" id="star-5" type="radio" name="rating" value="5" />
-            <label className="rating__label" htmlFor="star-5">Rating 5</label>
-
-            <input className="rating__input" id="star-4" type="radio" name="rating" value="4" />
-            <label className="rating__label" htmlFor="star-4">Rating 4</label>
-
-            <input className="rating__input" id="star-3" type="radio" name="rating" value="3" />
-            <label className="rating__label" htmlFor="star-3">Rating 3</label>
-
-            <input className="rating__input" id="star-2" type="radio" name="rating" value="2" />
-            <label className="rating__label" htmlFor="star-2">Rating 2</label>
-
-            <input className="rating__input" id="star-1" type="radio" name="rating" value="1" />
-            <label className="rating__label" htmlFor="star-1">Rating 1</label>
+          <div
+            className="rating__stars"
+          >
+            {[...Array(10)].map((item, i, array) => {
+              const index = array.length - i;
+              return (
+                <React.Fragment key={index}>
+                  <input
+                    className="rating__input"
+                    id={`star-${index}`}
+                    type="radio"
+                    name="rating"
+                    value={index}
+                    onChange={handleRatingChange}
+                    checked={index === rating}
+                  />
+                  <label className="rating__label" htmlFor={`star-${index}`}>{`Rating ${index}`}</label>
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
 
         <div className="add-review__text">
           <textarea
             className="add-review__textarea"
-            name="review-text" id="review-text"
+            name="review-text"
+            id="review-text"
             placeholder="Review text"
+            minLength={MIN_COMMENT_LENGTH}
+            maxLength={MAX_COMMENT_LENGTH}
+            onChange={handleReviewTextChange}
           >
           </textarea>
           <div className="add-review__submit">
-            <button className="add-review__btn" type="submit">Post</button>
+            <button
+              className="add-review__btn"
+              type="submit"
+              disabled={isDisabled}
+            >Post
+            </button>
           </div>
 
         </div>

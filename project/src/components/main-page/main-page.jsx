@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {Link} from 'react-router-dom';
 import FilmCardList from '../film-card-list/film-card-list';
 import FilmFilter from '../film-filter/film-filter';
 import UserBlock from '../user-block/user-block';
@@ -8,7 +9,7 @@ import MyListBtn from '../my-list-btn/my-list-btn';
 import {changeGenre} from '../../store/action';
 import {BASE_GENRE, AuthorizationStatus} from '../../const';
 import {getAuthorizationStatus} from '../../store/user/selectors';
-import {getPromoFilm} from '../../store/main-data/selectors';
+import {getPromoFilm} from '../../store/film-data/selectors';
 
 function MainPage() {
   const dispatch = useDispatch();
@@ -45,12 +46,12 @@ function MainPage() {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <Link className="btn film-card__button" to={`/player/${promoFilm.id}`}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
+                </Link>
                 <MyListBtn film={promoFilm} isPromo></MyListBtn>
               </div>
             </div>

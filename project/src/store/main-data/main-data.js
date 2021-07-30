@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeGenre, getFilmsByGenre, loadFilms, updateFilms, loadFavoriteFilms, loadPromoFilm} from '../action';
+import {changeGenre, getFilmsByGenre, loadFilms, updateFilms, loadFavoriteFilms} from '../action';
 import { adaptFilm } from '../adapter';
 import {BASE_GENRE} from '../../const';
 
@@ -8,8 +8,6 @@ const initialState = {
   films: [],
   favoriteFilms: [],
   isDataLoaded: false,
-  isPromoFilmLoaded: false,
-  promoFilm: null,
 };
 
 const mainData = createReducer(initialState, (builder) => {
@@ -29,10 +27,6 @@ const mainData = createReducer(initialState, (builder) => {
         film,
         ...state.films.slice(index + 1),
       ];
-    })
-    .addCase(loadPromoFilm, (state, action) => {
-      state.promoFilm = adaptFilm(action.payload);
-      state.isPromoFilmLoaded = true;
     })
     .addCase(loadFilms, (state, action) => {
       state.films = action.payload.map((film) => adaptFilm(film));

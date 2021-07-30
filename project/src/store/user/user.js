@@ -1,9 +1,10 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {requireAuthorization, logout} from '../action';
+import {requireAuthorization, logout, showError} from '../action';
 import { AuthorizationStatus } from '../../const';
 
 const initialState = {
   authorizationStatus: AuthorizationStatus.UNKNOWN,
+  error: '',
 };
 
 const user = createReducer(initialState, (builder) => {
@@ -13,6 +14,9 @@ const user = createReducer(initialState, (builder) => {
     })
     .addCase(logout, (state) => {
       state.authorizationStatus = AuthorizationStatus.NO_AUTH;
+    })
+    .addCase(showError, (state, action) => {
+      state.error = action.payload;
     });
 });
 

@@ -1,21 +1,39 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
+import {AuthorizationStatus, AppRoute} from '../../const';
+import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
+import { redirectToRoute } from '../../store/action';
 import {login} from '../../store/api-actions';
 import Logo from '../logo/logo';
+import Message from '../message/message';
 
-function SignIn() {
+const SIGN_IN_ERRORS = {
+  PASSWORD_ERROR: 'Please, enter valid password',
+};
+
+function SignIn({authorizationStatus}) {
+  const dispatch = useDispatch();
+
+  if(authorizationStatus === AuthorizationStatus.AUTH) {
+    dispatch(redirectToRoute(AppRoute.ROOT));
+  }
+
+  const [passwordError, setPasswordError] = useState(false);
+
   const loginRef = useRef();
   const passwordRef = useRef();
-
-  const dispatch = useDispatch();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    dispatch(login({
-      login: loginRef.current.value,
-      password: passwordRef.current.value,
-    }));
+    if (/\s/.test(passwordRef.current.value)) {
+      setPasswordError(true);
+    } else {
+      dispatch(login({
+        login: loginRef.current.value,
+        password: passwordRef.current.value,
+      }));
+    }
   };
 
   return (
@@ -32,6 +50,7 @@ function SignIn() {
           className="sign-in__form"
           onSubmit={handleSubmit}
         >
+          {passwordError && <Message message={SIGN_IN_ERRORS.PASSWORD_ERROR}/>}
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input
@@ -72,5 +91,9 @@ function SignIn() {
     </div>
   );
 }
+
+SignIn.propTypes = {
+  authorizationStatus: PropTypes.string.isRequired,
+};
 
 export default SignIn;

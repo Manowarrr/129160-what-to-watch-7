@@ -10,7 +10,8 @@ import Player from '../player/player';
 import LoadingScreen from '../loading-screen/loading-screen';
 import SignIn from '../sign-in/sign-in';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import {getIsDataLoaded, getIsPromoFilmLoaded} from '../../store/main-data/selectors';
+import {getIsDataLoaded} from '../../store/main-data/selectors';
+import {getIsPromoFilmLoaded} from '../../store/film-data/selectors';
 import {getAuthorizationStatus} from '../../store/user/selectors';
 import {isCheckedAuth} from '../../util';
 import PrivateRoute from '../private-route/private-route';
@@ -35,7 +36,7 @@ function App() {
           <MainPage />
         </Route>
         <Route exact path={AppRoute.LOGIN}>
-          <SignIn />
+          <SignIn authorizationStatus={authorizationStatus} />
         </Route>
         <Route
           exact

@@ -3,22 +3,26 @@ import { useHistory } from 'react-router';
 import {useSelector} from 'react-redux';
 import {getFilms} from '../../store/main-data/selectors';
 import {useParams} from 'react-router-dom';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function Player() {
   const { id } = useParams();
   const films = useSelector(getFilms);
   const [ film ] = films.filter((element) => element.id === Number.parseInt(id, 10));
-  const runTime = film.runTime * 60;
 
   const [isPlayerRunning, setIsPlayerRunning] = useState(false);
   const [currentTimePlaying, setCurrentTimePlaying] = useState(0);
-  const videoElement = useRef(null);
+  const [isLoadingScreen, setIsLoadingScreen] = useState(false);
+
+  const videoElement = useRef();
   const history = useHistory();
+  const fulltime = film.runTime * 60;
 
   const handlePlayVideoClick = () => {
     if (videoElement.current.paused || videoElement.current.ended) {
       videoElement.current.play();
       setIsPlayerRunning(true);
+      setIsLoadingScreen(true);
     } else {
       videoElement.current.pause();
       setIsPlayerRunning(false);
@@ -39,28 +43,30 @@ function Player() {
 
   const formatRuntime = (runtime) => {
     runtime = runtime / 60;
-    const hours   = Math.floor(runtime / 60);
+    let hours   = Math.floor(runtime / 60);
     let minutes = Math.floor((runtime - hours * 60));
     let seconds = Math.floor(runtime * 60 - hours * 3600 - minutes * 60);
 
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     seconds = seconds < 10 ? `0${seconds}` : seconds;
+    hours = hours < 10 ? `0${hours}` : hours;
 
-    return `${hours}:${minutes}:${seconds}`;
+    return hours === 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
   };
 
   return (
     <div className="player">
+      {isLoadingScreen && <LoadingScreen></LoadingScreen>}
       <video
         ref={videoElement}
         src={film.videoLink}
         className="player__video"
         poster={film.backgroundImage}
-        onProgress={handleCurrentTimePlaying}
+        onTimeUpdate={handleCurrentTimePlaying}
+        onPlaying={() => setIsLoadingScreen(false)}
         muted
       >
       </video>
-
       <button
         type="button"
         className="player__exit"
@@ -73,13 +79,13 @@ function Player() {
           <div className="player__time">
             <progress
               className="player__progress"
-              value={`${(currentTimePlaying/film.runTime*60)*100}%`}
+              value={`${currentTimePlaying/fulltime*100}%`}
               max="100"
             >
             </progress>
-            <div className="player__toggler" style={{ left: `${currentTimePlaying/runTime*100}%`}}>Toggler</div>
+            <div className="player__toggler" style={{ left: `${currentTimePlaying/fulltime*100}%`}}>Toggler</div>
           </div>
-          <div className="player__time-value">{formatRuntime(runTime - currentTimePlaying)}</div>
+          <div className="player__time-value">{formatRuntime(fulltime - currentTimePlaying)}</div>
         </div>
 
         <div className="player__controls-row">
