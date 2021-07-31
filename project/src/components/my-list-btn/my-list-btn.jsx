@@ -1,9 +1,7 @@
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {updateFilmStatus} from '../../store/api-actions';
-import PropTypes from 'prop-types';
 import filmCardProp from '../../components/film-card/film-card.prop';
-//import {getPromoFilm} from '../../store/main-data/selectors';
 
 function MyListBtn({film}) {
   const dispatch = useDispatch();
@@ -32,7 +30,6 @@ function MyListBtn({film}) {
 
 MyListBtn.propTypes = {
   film: filmCardProp,
-  isPromo: PropTypes.bool,
 };
 
 export default MyListBtn;

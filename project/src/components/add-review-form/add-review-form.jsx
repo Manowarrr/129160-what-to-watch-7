@@ -5,6 +5,7 @@ import {addComment} from '../../store/api-actions';
 
 const MIN_COMMENT_LENGTH = 50;
 const MAX_COMMENT_LENGTH = 400;
+const STARS_COUNT = 10;
 
 function AddReviewForm({filmId}) {
   const dispatch = useDispatch();
@@ -13,7 +14,6 @@ function AddReviewForm({filmId}) {
   const isDisabled = rating === 0 || reviewText.length < MIN_COMMENT_LENGTH || reviewText.length > MAX_COMMENT_LENGTH;
 
   function handleRatingChange(evt) {
-    evt.preventDefault();
     setRating(Number(evt.target.value));
   }
 
@@ -32,6 +32,28 @@ function AddReviewForm({filmId}) {
     }));
   };
 
+  const inputs = [...Array(STARS_COUNT)].map((_, index) => {
+    const id = STARS_COUNT - index;
+
+    return (
+      <React.Fragment key={id}>
+        <input
+          id={`star-${id}`}
+          className="rating__input"
+          type="radio"
+          name="rating"
+          value={id}
+          onChange={handleRatingChange}
+        />
+        <label
+          className="rating__label"
+          htmlFor={`star-${id}`}
+        >Rating {index}
+        </label>
+      </React.Fragment>
+    );
+  });
+
   return (
     <div className="add-review">
       <form
@@ -43,23 +65,7 @@ function AddReviewForm({filmId}) {
           <div
             className="rating__stars"
           >
-            {[...Array(10)].map((item, i, array) => {
-              const index = array.length - i;
-              return (
-                <React.Fragment key={index}>
-                  <input
-                    className="rating__input"
-                    id={`star-${index}`}
-                    type="radio"
-                    name="rating"
-                    value={index}
-                    onChange={handleRatingChange}
-                    checked={index === rating}
-                  />
-                  <label className="rating__label" htmlFor={`star-${index}`}>{`Rating ${index}`}</label>
-                </React.Fragment>
-              );
-            })}
+            {inputs}
           </div>
         </div>
 

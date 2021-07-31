@@ -2,12 +2,12 @@ import React, {useRef, useState} from 'react';
 import {AuthorizationStatus, AppRoute} from '../../const';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import { redirectToRoute } from '../../store/action';
+import {redirectToRoute} from '../../store/action';
 import {login} from '../../store/api-actions';
 import Logo from '../logo/logo';
 import Message from '../message/message';
 
-const SIGN_IN_ERRORS = {
+const SignInErrors = {
   PASSWORD_ERROR: 'Please, enter valid password',
 };
 
@@ -50,7 +50,7 @@ function SignIn({authorizationStatus}) {
           className="sign-in__form"
           onSubmit={handleSubmit}
         >
-          {passwordError && <Message message={SIGN_IN_ERRORS.PASSWORD_ERROR}/>}
+          {passwordError && <Message message={SignInErrors.PASSWORD_ERROR}/>}
           <div className="sign-in__fields">
             <div className="sign-in__field">
               <input
