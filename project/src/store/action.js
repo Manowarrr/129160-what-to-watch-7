@@ -68,8 +68,4 @@ export const redirectToRoute = createAction(ActionType.REDIRECT_TO_ROUTE, (url) 
   payload: url,
 }));
 
-export const showError = createAction(ActionType.SHOW_ERROR, (error) => ({
-  payload: error,
-}));
-
 

@@ -5,6 +5,9 @@ import {getFilms} from '../../store/main-data/selectors';
 import {useParams} from 'react-router-dom';
 import LoadingScreen from '../loading-screen/loading-screen';
 
+const MINUTE_COUNT_IN_HOUR = 60;
+const SECOND_COUNT_IN_HOUR = 3600;
+
 function Player() {
   const { id } = useParams();
   const films = useSelector(getFilms);
@@ -16,7 +19,7 @@ function Player() {
 
   const videoElement = useRef();
   const history = useHistory();
-  const fulltime = film.runTime * 60;
+  const fulltime = film.runTime * MINUTE_COUNT_IN_HOUR;
 
   const handlePlayVideoClick = () => {
     if (videoElement.current.paused || videoElement.current.ended) {
@@ -42,10 +45,10 @@ function Player() {
   const handleCurrentTimePlaying = (e) => setCurrentTimePlaying(e.target.currentTime);
 
   const formatRuntime = (runtime) => {
-    runtime = runtime / 60;
-    let hours   = Math.floor(runtime / 60);
-    let minutes = Math.floor((runtime - hours * 60));
-    let seconds = Math.floor(runtime * 60 - hours * 3600 - minutes * 60);
+    runtime = runtime / MINUTE_COUNT_IN_HOUR;
+    let hours   = Math.floor(runtime / MINUTE_COUNT_IN_HOUR);
+    let minutes = Math.floor((runtime - hours * MINUTE_COUNT_IN_HOUR));
+    let seconds = Math.floor(runtime * MINUTE_COUNT_IN_HOUR - hours * SECOND_COUNT_IN_HOUR - minutes * MINUTE_COUNT_IN_HOUR);
 
     minutes = minutes < 10 ? `0${minutes}` : minutes;
     seconds = seconds < 10 ? `0${seconds}` : seconds;
